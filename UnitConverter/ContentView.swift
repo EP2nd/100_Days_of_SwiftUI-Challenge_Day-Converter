@@ -8,51 +8,107 @@
 import SwiftUI
 
 struct ContentView: View {
-    
     let lengthUnits = ["m", "km", "ft", "yd", "mi"]
-    
     @State private var inputUnit = "m"
     @State private var outputUnit = "m"
-    @State private var inputValue = 0.0
+    @State private var inputValue = Double(0)
     
     @FocusState private var amountIsFocused: Bool
     
     var outputValue: Double {
+        var convertedValue = Double(0)
+        var meters = Double(0)
         
-        let inputValueToMetersMultiplier: Double
-        let metersToOutputValueMultiplier: Double
-        
-        switch inputUnit {
-        case "km":
-            inputValueToMetersMultiplier = 1000
-        case "ft":
-            inputValueToMetersMultiplier = 0.3048
-        case "yd":
-            inputValueToMetersMultiplier = 0.9144
-        case "mi":
-            inputValueToMetersMultiplier = 1609.344
-        default:
-            inputValueToMetersMultiplier = 1.0
+        if inputUnit == outputUnit {
+            convertedValue = inputValue
+        } else if inputUnit == "m" && outputUnit == "km" {
+            convertedValue = metersToKilometers(inputValue)
+        } else if inputUnit == "m" && outputUnit == "ft" {
+            convertedValue = metersToFeet(inputValue)
+        } else if inputUnit == "m" && outputUnit == "yd" {
+            convertedValue = metersToYards(inputValue)
+        } else if inputUnit == "m" && outputUnit == "mi" {
+            convertedValue = metersToMiles(inputValue)
+        } else if inputUnit == "km" && outputUnit == "m" {
+            convertedValue = kilometersToMeters(inputValue)
+        } else if inputUnit == "km" && outputUnit == "ft" {
+            meters = kilometersToMeters(inputValue)
+            convertedValue = metersToFeet(meters)
+        } else if inputUnit == "km" && outputUnit == "yd" {
+            meters = kilometersToMeters(inputValue)
+            convertedValue = metersToYards(meters)
+        } else if inputUnit == "km" && outputUnit == "mi" {
+            meters = kilometersToMeters(inputValue)
+            convertedValue = metersToMiles(meters)
+        } else if inputUnit == "ft" && outputUnit == "m" {
+            convertedValue = feetToMeters(convertedValue)
+        } else if inputUnit == "ft" && outputUnit == "km" {
+            meters = feetToMeters(inputValue)
+            convertedValue = metersToKilometers(meters)
+        } else if inputUnit == "ft" && outputUnit == "yd" {
+            meters = feetToMeters(inputValue)
+            convertedValue = metersToYards(meters)
+        } else if inputUnit == "ft" && outputUnit == "mi" {
+            meters = feetToMeters(inputValue)
+            convertedValue = metersToMiles(meters)
+        } else if inputUnit == "yd" && outputUnit == "m" {
+            convertedValue = yardsToMeters(inputValue)
+        } else if inputUnit == "yd" && outputUnit == "km" {
+            meters = yardsToMeters(inputValue)
+            convertedValue = metersToKilometers(meters)
+        } else if inputUnit == "yd" && outputUnit == "ft" {
+            meters = yardsToMeters(inputValue)
+            convertedValue = metersToFeet(meters)
+        } else if inputUnit == "yd" && outputUnit == "mi" {
+            meters = yardsToMeters(inputValue)
+            convertedValue = metersToMiles(meters)
+        } else if inputUnit == "mi" && outputUnit == "m" {
+            convertedValue = milesToMeters(inputValue)
+        } else if inputUnit == "mi" && outputUnit == "km" {
+            meters = milesToMeters(inputValue)
+            convertedValue = metersToKilometers(meters)
+        } else if inputUnit == "mi" && outputUnit == "ft" {
+            meters = milesToMeters(inputValue)
+            convertedValue = metersToFeet(meters)
+        } else if inputUnit == "mi" && outputUnit == "yd" {
+            meters = milesToMeters(inputValue)
+            convertedValue = metersToYards(meters)
         }
-        
-        switch outputUnit {
-        case "km":
-            metersToOutputValueMultiplier = 0.001
-        case "ft":
-            metersToOutputValueMultiplier = 3.280839895
-        case "yd":
-            metersToOutputValueMultiplier = 1.09361
-        case "mi":
-            metersToOutputValueMultiplier = 0.000621371
-        default:
-            metersToOutputValueMultiplier = 1.0
-        }
-        
-        let inputValueToMeters = inputValue * inputValueToMetersMultiplier
-        let metersToOutputValue = inputValueToMeters * metersToOutputValueMultiplier
-        
-        return metersToOutputValue
+        return convertedValue
     }
+    
+    func kilometersToMeters(_ inputValue: Double) -> Double {
+        inputValue * 1000
+    }
+    
+    func feetToMeters(_ inputValue: Double) -> Double {
+        inputValue * 0.3048
+    }
+    
+    func yardsToMeters(_ inputValue: Double) -> Double {
+        inputValue * 0.9144
+    }
+    
+    func milesToMeters(_ inputValue: Double) -> Double {
+        inputValue * 1609.344
+    }
+    
+    func metersToKilometers(_ inputValue: Double) -> Double {
+        inputValue / 1000
+    }
+    
+    func metersToFeet(_ inputValue: Double) -> Double {
+        inputValue * 3.280839895
+    }
+    
+    func metersToYards(_ inputValue: Double) -> Double {
+        inputValue / 0.9144
+    }
+    
+    func metersToMiles(_ inputValue: Double) -> Double {
+        inputValue / 1609.344
+    }
+    
     
     var body: some View {
         NavigationView {
@@ -82,7 +138,7 @@ struct ContentView: View {
                 }
                 .pickerStyle(.segmented)
             }
-            .navigationTitle("Length Units Converter")
+            .navigationTitle("UnitConverter")
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
