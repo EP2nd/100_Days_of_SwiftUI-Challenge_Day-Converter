@@ -13,7 +13,7 @@ struct ContentView: View {
     
     @State private var inputUnit = "m"
     @State private var outputUnit = "m"
-    @State private var inputValue = Double(0)
+    @State private var inputValue: Double = 0
     
     @FocusState private var amountIsFocused: Bool
     
@@ -49,9 +49,8 @@ struct ContentView: View {
         }
         
         let inputValueToMeters = inputValue * inputValueToMetersMultiplier
-        let metersToOutputValue = inputValueToMeters * metersToOutputValueMultiplier
         
-        return metersToOutputValue
+        return inputValueToMeters * metersToOutputValueMultiplier
     }
     
     var body: some View {
